@@ -1,4 +1,4 @@
-# 115网盘秒传（MoviePilot V3）
+# 硬盘秒传（MoviePilot V3）
 
 将本地（含 qBittorrent 下载完成）的媒体文件**秒传**到 115 网盘，全程只读本地文件。
 

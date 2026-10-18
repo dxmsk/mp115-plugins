@@ -51,14 +51,14 @@ _DEFAULT_MEDIA_EXTS = {
 class Mp115CloudPush(_PluginBase):
     """115 网盘秒传插件。"""
 
-    plugin_name = "115网盘秒传"
+    plugin_name = "硬盘秒传"
     plugin_desc = (
         "115 网盘本地文件秒传：CK/扫码登录、目录树浏览、选择本地整个文件夹批量秒传、"
         "监控 qB 下载完成秒级秒传并从 MP 整理队列移除、定时重试未成功且未整理的文件。"
         "全程只读本地文件，绝不移动/删除源文件。"
     )
     plugin_icon = "115pan_A.png"
-    plugin_version = "1.0.0"
+    plugin_version = "1.0.1"
     plugin_author = "minis"
     author_url = ""
     plugin_config_prefix = "mp115cloudpush_"
@@ -593,7 +593,7 @@ class Mp115CloudPush(_PluginBase):
         if not self._notify:
             return
         try:
-            self.post_message(title="115网盘秒传", text=text)
+            self.post_message(title="硬盘秒传", text=text)
         except Exception:  # noqa: BLE001
             pass
 
@@ -612,7 +612,7 @@ class Mp115CloudPush(_PluginBase):
                     f"115 登录: {'是' if st['logged'] else '否'}\n"
                     f"待重试: {st['pending']}\n"
                     f"已秒传: {st['done_count']}")
-            self.post_message(title="115网盘秒传", text=text)
+            self.post_message(title="硬盘秒传", text=text)
 
     # ------------------------------------------------------------------
     # 配置与详情页
