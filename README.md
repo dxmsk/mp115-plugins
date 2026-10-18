@@ -1,12 +1,15 @@
 # mp115-plugins
 
-MoviePilot **V3** 插件仓库（个人维护）。
+MoviePilot 插件仓库（**V2 + V3 双版本**）。
 
 ## 插件列表
 
-| 插件 | 版本 | 说明 |
-|---|---|---|
-| [硬盘秒传](plugins.v3/mp115cloudpush/) | v1.0.0 | 115 网盘本地文件秒传：CK/扫码登录、目录树浏览、选择本地整个文件夹批量秒传、监控 qB 下载完成秒级秒传、定时重试 |
+| 插件 | 版本 | V2 | V3 | 说明 |
+|---|---|---|---|---|
+| [硬盘秒传](plugins.v2/mp115cloudpush/) | v1.0.1 | ✅ | ✅ | 115 网盘本地文件秒传：CK/扫码登录、目录树浏览、选择本地整个文件夹批量秒传、监控 qB 下载完成秒级秒传、定时重试 |
+
+> 同一个插件 ID（`Mp115CloudPush`）在两个代际各有一份实现，MoviePilot 会按自身版本自动选用对应目录：
+> V2 环境读 `package.v2.json` → `plugins.v2/`；V3 环境读 `package.v3.json` → `plugins.v3/`。
 
 ## 安装方式
 
@@ -22,9 +25,19 @@ MoviePilot **V3** 插件仓库（个人维护）。
 https://github.com/dxmsk/mp115-plugins
 ```
 
-保存后刷新插件市场，即可在「未安装」列表中找到 **硬盘秒传**。
+保存后刷新插件市场，到「未安装」列表搜 **硬盘秒传**。
 
 > 多个插件市场地址之间用英文逗号分隔。
+
+### 拉不到索引时
+
+GitHub raw 在国内网络下可能超时（MoviePilot 拉索引的超时是 15 秒）。可在环境变量中配置镜像：
+
+```yaml
+GITHUB_PROXY=https://ghfast.top/
+```
+
+配置后重启容器再刷新。
 
 ## 插件说明
 
@@ -47,12 +60,13 @@ https://github.com/dxmsk/mp115-plugins
 
 ```
 mp115-plugins/
-├── plugins.v3/            # V3 插件源码，每个插件一个目录（类名小写）
-│   └── mp115cloudpush/
-├── tests/v3/              # V3 插件单测，按插件 ID 建子目录
-│   └── mp115cloudpush/
-├── icons/                 # 插件图标
-├── package.v3.json        # V3 插件市场索引
+├── plugins.v2/mp115cloudpush/   # V2 实现（app.plugins._PluginBase 等旧路径）
+├── plugins.v3/mp115cloudpush/   # V3 实现（app.sdk.* 稳定 SDK）
+├── tests/v2/mp115cloudpush/     # V2 单测
+├── tests/v3/mp115cloudpush/     # V3 单测
+├── icons/115pan_A.png
+├── package.v2.json              # V2 插件市场索引
+├── package.v3.json              # V3 插件市场索引
 ├── pytest.ini
 └── LICENSE
 ```
@@ -63,8 +77,8 @@ mp115-plugins/
 并使用带后端依赖的解释器：
 
 ```bash
-# 在插件仓同级放置 MoviePilot 后端后
-<workspace>/.venv/bin/python -m pytest tests/v3
+<workspace>/.venv/bin/python -m pytest tests/v2   # V2 实现
+<workspace>/.venv/bin/python -m pytest tests/v3   # V3 实现
 ```
 
 详见 [tests/README.md](tests/README.md)。

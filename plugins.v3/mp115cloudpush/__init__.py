@@ -31,12 +31,6 @@ from app.schemas.types import EventType
 
 from .p115_core import P115AuthError, P115Error, P115Service
 
-# 秒传成功后尝试把源文件从 MP 整理队列移除
-try:
-    from app.chain.transfer import TransferChain
-except Exception:  # noqa: BLE001
-    TransferChain = None
-
 LOG_TAG = "[115秒传] "
 
 # 可选：直接从 MoviePilot 的媒体库配置读取允许的媒体扩展名
@@ -423,12 +417,12 @@ class Mp115CloudPush(_PluginBase):
     # ------------------------------------------------------------------
     def _try_remove_queue(self, fp: Path) -> None:
         """若该源文件仍在 MP 整理队列，秒传成功后从队列移除。"""
-        if not self._remove_queue or not TransferChain:
+        if not self._remove_queue:
             return
         try:
-            from app.schemas import FileItem
-            chain = TransferChain()
-            chain.remove_from_queue(FileItem(storage="local", path=str(fp)))
+            from app.chain.transfer import TransferChain as _Chain
+            from app.schemas import FileItem as _FileItem
+            _Chain().remove_from_queue(_FileItem(storage="local", path=str(fp)))
             logger.info(f"{LOG_TAG}秒传成功，已将 {fp} 从整理队列移除")
         except Exception as exc:  # noqa: BLE001
             logger.warning(f"{LOG_TAG}移除整理队列失败: {exc}")
